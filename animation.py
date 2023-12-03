@@ -1,11 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+from IPython.display import HTML
 
-    
+R = 1.0  # Radien på cylindern
+
 
 def simulate(nu):
     U = 1.0  # Exempelvärde
-    R = 1.0  # Radien på cylindern
     omega = lambda t: 0.5 * t # Linjärt beroende, omega = 0.5 * t
 
     # Rums- och tidsparametrar
@@ -35,17 +37,24 @@ def simulate(nu):
             # Explicit Euler för att uppdatera u_theta
             u_theta[n + 1, j] = u_theta[n, j] + dt * du_dt
 
-    # Visa resultatet
-    plt.figure(figsize=(10, 6))
-    plt.imshow(u_theta, extent=[R, r_max, t_max, 0], aspect='auto')
-    plt.colorbar(label='$u_\\theta$')
-    plt.xlabel('Radie (r)')
-    plt.xlim(1, 2)
-    plt.ylabel('Tid (t)')
-    plt.title('Utveckling av $u_\\theta$ över tid och radie, för $\\nu = {}$'.format(nu))
-    plt.show()
+    return u_theta, r, t_max
 
+# Skapa en animation över olika värden på nu
 nus = np.linspace(0.1, 0.5, num=5)
+fig, ax = plt.subplots(figsize=(10, 6))
 
-for nu in nus:
-    simulate(nu)
+def update(frame):
+    nu = nus[frame]
+    u_theta, r, t_max = simulate(nu)
+    ax.clear()
+    im = ax.imshow(u_theta, extent=[R, 10*R, t_max, 0], aspect='auto')
+    ax.set_xlabel('Radie (r)')
+    ax.set_ylabel('Tid (t)')
+    ax.set_title('Utveckling av $u_\\theta$ över tid och radie, för $\\nu = {:.2f}$'.format(nu))
+    return im,
+
+ani = animation.FuncAnimation(fig, update, frames=len(nus), blit=True)
+plt.colorbar(ax.imshow(np.zeros((100, 100))), ax=ax, label='$u_\\theta$')
+
+# Visa animationen
+HTML(ani.to_jshtml())
