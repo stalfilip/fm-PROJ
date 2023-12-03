@@ -47,5 +47,5 @@ def simulate(nu):
 
 nus = np.linspace(0.1, 0.5, num=5)
 
-for nu in nus:
-    simulate(nu)
+nu_choosen = 0.3
+simulate(nu_choosen)
