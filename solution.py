@@ -1,11 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-my = 0.00089
-rho = 1000
-U = 0.1
-nu = my / rho
-R = 1  # Antaget värde för R, behöver justeras enligt specifika förhållanden
+# Parametrar
+U = 1.0  # Exempelvärde
+R = 1.0  # Radien på cylindern
+nu = 0.1 # Viskositet, exempelvärde
 omega = lambda t: 0.5 * t # Linjärt beroende, omega = 0.5 * t
 
 # Rums- och tidsparametrar
@@ -40,6 +39,7 @@ plt.figure(figsize=(10, 6))
 plt.imshow(u_theta, extent=[R, r_max, t_max, 0], aspect='auto')
 plt.colorbar(label='$u_\\theta$')
 plt.xlabel('Radie (r)')
+plt.xlim(1, 2)
 plt.ylabel('Tid (t)')
 plt.title('Utveckling av $u_\\theta$ över tid och radie')
 plt.show()
