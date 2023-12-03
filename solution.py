@@ -5,7 +5,7 @@ my = 0.00089
 rho = 1000
 U = 0.1
 nu = my / rho
-R = 0.5  # Antaget värde för R, behöver justeras enligt specifika förhållanden
+R = 1  # Antaget värde för R, behöver justeras enligt specifika förhållanden
 omega = lambda t: 0.5 * t # Linjärt beroende, omega = 0.5 * t
 
 # Rums- och tidsparametrar
