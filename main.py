@@ -6,12 +6,13 @@ from scipy.integrate import solve_ivp
 # Uppdaterade parametrar och värden
 my = 0.00089
 rho = 1000
+U = 0.1
 nu = my / rho
 R = 0.5  # Antaget värde för R, behöver justeras enligt specifika förhållanden
-r_max = 100 * R
-r_steps = 10**4
-t_steps = 10**6
-t_max = 10
+r_max = 10 * R
+r_steps = 10**3
+t_steps = 10**5
+t_max = 20
 
 # Skapa rums- och tidsnät
 r = np.linspace(R, r_max, r_steps)
@@ -21,6 +22,7 @@ t = np.linspace(0, t_max, t_steps)
 u_theta_initial = np.zeros(r_steps)
 
 # Funktion som beskriver tidsutvecklingen av u_theta
+
 def du_theta_dt(t, u_theta, r, nu, R):
     # Diskretisering av rumsderivator
     dr = r[1] - r[0]
@@ -35,9 +37,10 @@ def du_theta_dt(t, u_theta, r, nu, R):
     u_theta[-1] = 0  # när r -> oändligheten
 
     # PDE diskretiserad
-    du_theta_dt = nu * (d2u_dr2 + (1/r) * du_dr - (u_theta/r**2)) - (u_theta/r**2) - (R / r) * du_dr
-
+    du_theta_dt = nu * (d2u_dr2 + (1/r) * du_dr - (u_theta/r**2)) + R * U * (u_theta/r**2) + (R*U / r) * du_dr
     return du_theta_dt
+
+
 
 # Löser PDE:n över tid
 sol = solve_ivp(du_theta_dt, [0, t_max], u_theta_initial, t_eval=t, args=(r, nu, R))
